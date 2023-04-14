@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const ImageSelector = ({ images }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -14,8 +15,11 @@ const ImageSelector = ({ images }) => {
       setIsLoading(false);
     }, 5000);
 
-    return () => clearTimeout(timer);
-  }, []); // Remove images from the dependency array
+    return () => {
+      clearTimeout(timer);
+      setSelectedImage(null); // Reset the selected image state
+    };
+  }, [images]);
 
   const downloadImage = () => {
     const link = document.createElement("a");
@@ -27,7 +31,7 @@ const ImageSelector = ({ images }) => {
   const handleButtonClick = () => {
     navigate("/Application");
   };
-  const navigate = useNavigate();
+
   return (
     <div className="random-image-container">
       {isLoading && (
